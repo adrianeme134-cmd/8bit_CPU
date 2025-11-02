@@ -13,7 +13,7 @@ module Instruction_Register #(parameter ADDRESS_WIDTH = 3) (
     reg [7:0] rom_data [0:7]; // 8 entries
 
     initial begin
-        // 8 Ram modules will store up to 4 instructions
+        // 8 Ram modules will store up to 4 instructions of byte addressed memory
         rom_data[0] = 8'b00010100; 
         rom_data[1] = 4'h5; 
         rom_data[2] = 4'hC; 
