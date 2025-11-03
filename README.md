@@ -46,6 +46,8 @@ Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive 
 
 ## Supported Instructions
 
+More to be added soon!
+
 | Mnemonic | Opcode | Description |
 |-----------|:------:|-------------|
 | `NOP` | `0000` | No operation |
@@ -65,9 +67,7 @@ Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive 
 
 ##  Tools Used
 
-- **Vivado 2024.1** – Synthesis, simulation, and testbench verification  
-- **GTKWave** – Waveform visualization for module testing  
-- **BASYS3 FPGA (Artix-7)** – Target board for hardware implementation  
+- **Vivado 2017.4** – Synthesis, simulation, and testbench verification   
 - **Git / GitHub** – Version control and project documentation  
 
 ---
@@ -86,5 +86,5 @@ Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive 
 - Create top-level CPU integration connecting all modules  
 - Implement branching and jump logic  
 - Add immediate value and I/O instructions  
-- Extend memory and instruction ROM size  
+- Extend instruction set
 
