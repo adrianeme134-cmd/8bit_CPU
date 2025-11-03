@@ -69,7 +69,7 @@ More to be added soon!
 
 - **Vivado 2017.4** – Synthesis, simulation, and testbench verification   
 - **Git / GitHub** – Version control and project documentation  
-
+- **BASYS3 FPGA** - FPGA used for testing and design verification
 ---
 
 ## Learning Objectives
