@@ -30,7 +30,7 @@ The goal of this project is not yet to achieve full functionality, but rather to
 
 ---
 
-##  Instruction Format
+## Instruction Format
 
 Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive bytes:
 
@@ -46,30 +46,51 @@ Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive 
 
 ## Supported Instructions
 
-More to be added soon!
-
-| Mnemonic | Opcode | Description |
-|-----------|:------:|-------------|
-| `NOP` | `0000` | No operation |
-| `ADD` | `0001` | A + B → Dest |
-| `SUB` | `0010` | A – B → Dest |
-| `ORR` | `0011` | Logical OR |
-| `XORR` | `0100` | Logical XOR |
-| `LD`  | `0101` | Load from memory |
-| `ST`  | `0110` | Store to memory |
-| `JMP` | `0111` | Jump to address |
-| `BEQ` | `1000` | Branch if equal |
-| `LDI` | `1001` | Load immediate |
-| `NOTI`| `1010` | Bitwise NOT |
-| `HLT` | `1011` | Halt execution |
+| **Category** | **Instruction** | **Example** | **Meaning** | **Comments** | **Format** | **Type** |
+|---------------|----------------|--------------|--------------|---------------|------------|----------|
+| **Arithmetic** | `add` | `add R1,R2,R3` | R1 = R2 + R3 | 3-register addition | Register to Register | R-Type |
+|  | `addi` | `addi R1,R2,5` | R1 = R2 + 5 | Immediate addition | Immediate | I-Type |
+|  | `sub` | `sub R1,R2,R3` | R1 = R2 - R3 | 3-register subtraction | Register to Register | R-Type |
+|  | `subi` | `subi R1,R2,5` | R1 = R2 - 5 | Immediate subtraction | Immediate | I-Type |
+|  | `slt` | `slt R1,R2,R3` | R1 = (R2 < R3) ? 1 : 0 | Set if less than | Register to Register | R-Type |
+|  | `slti` | `slti R1,R2,5` | R1 = (R2 < 5) ? 1 : 0 | Immediate comparison | Immediate | I-Type |
+| **Logical / Bitwise** | `bitAND` | `bitAND R1,R2,R3` | R1 = R2 & R3 | Logical AND | Register to Register | R-Type |
+|  | `bitNAND` | `bitNAND R1,R2,R3` | R1 = ~(R2 & R3)` | Logical NAND | Register to Register | R-Type |
+|  | `sll` | `sll R1,R2` | R1 = R2 << 1 | Shift left logical | Immediate | I-Type |
+|  | `sra` | `sra R1,R2` | R1 = R2 >>> 1 | Shift right arithmetic | Immediate | I-Type |
+| **Data Transfer** | `lb` | `lb R1,5(R2)` | R1 = Mem[R2 + 5] | Load byte from memory | Immediate | I-Type |
+|  | `sb` | `sb R1,5(R2)` | Mem[R2 + 5] = R1 | Store byte to memory | Immediate | I-Type |
+| **Branch / Control** | `beq` | `beq R1,R2,label` | if (R1 == R2) PC = label | Branch if equal | Immediate | I-Type |
+|  | `bne` | `bne R1,R2,label` | if (R1 != R2) PC = label | Branch if not equal | Immediate | I-Type |
+|  | `blt` | `blt R1,R2,label` | if (R1 < R2) PC = label | Branch if less than | Immediate | I-Type |
+| **Jump / Link** | `jump` | `jump label` | PC = label | Unconditional jump | Jump Type | J-Type |
+|  | `jal` | `jal label` | R7 = PC + 2; PC = label | Jump and link (function call) | Jump Type | J-Type |
 
 ---
 
-##  Tools Used
+### ISA Summary
+- **Instruction Width:** 16 bits (2 bytes)  
+- **Data Width:** 8 bits  
+- **Registers:** 8 general-purpose registers (R0–R7)  
+- **Opcode Field:** 4 bits (16 total operations)  
+- **Addressing:** Byte-addressable memory  
+
+#### Legend
+- `op`: operation of instruction  
+- `rd`: destination operand register  
+- `rs`: first source operand register  
+- `rt`: second source operand register  
+- `immediate`: constants for immediate instructions  
+- `address`: offset for load/store instructions  
+
+---
+
+## Tools Used
 
 - **Vivado 2017.4** – Synthesis, simulation, and testbench verification   
 - **Git / GitHub** – Version control and project documentation  
-- **BASYS3 FPGA** - FPGA used for testing and design verification
+- **BASYS3 FPGA** - FPGA used for testing and design verification  
+
 ---
 
 ## Learning Objectives
@@ -86,5 +107,4 @@ More to be added soon!
 - Create top-level CPU integration connecting all modules  
 - Implement branching and jump logic  
 - Add immediate value and I/O instructions  
-- Extend instruction set
-
+- Extend instruction set  

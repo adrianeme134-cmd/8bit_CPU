@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 
-//Job of the Decoder module is to take the machine code from instruction register and break the instruction up to send to FSM, ALU
+//Job of the Decoder module is to take the machine code from instruction register and break the instruction up to send to FSM, ALU, Register file
 module Decoder(
     input wire [15:0] Fetch,       // 16-bit instruction assembled from ROM
     output reg  [2:0] Register_Destination, //3 bit field where output bits will live, this goes to register file
@@ -9,26 +9,27 @@ module Decoder(
     output reg   [2:0]Register_2_operand, //3 bit field where register 2 lives output goes to register file
     output reg [3:0] Opcode //4 bit opcode that tells FSM/ALU what operation to perform
 );
-//DEFINE NEW INSTRUCTION SET USING 16 BITS
 
-
-
-    // Registers
+// TODO Decoder logic needs fixing
     
 
     // Define instruction opcodes
-    parameter NOP = 4'b0000;
-    parameter ADD = 4'b0001;
-    parameter SUB = 4'b0010;
-    parameter ORR = 4'b0011;
-    parameter XORR = 4'b0100;
-    parameter LD  = 4'b0101;
-    parameter ST  = 4'b0110;
-    parameter JMP = 4'b0111;
-    parameter BEQ = 4'b1000;
-    parameter LDI = 4'b1001;
-    parameter NOTI= 4'b1010;
-    parameter HLT = 4'b1011;
+    parameter addi = 4'b0000;
+    parameter add = 4'b0001;
+    parameter lb = 4'b0010;
+    parameter subi = 4'b0011;
+    parameter sub = 4'b0100;
+    parameter beq  = 4'b0101;
+    parameter bne  = 4'b0110;
+    parameter slt = 4'b0111;
+    parameter slti = 4'b1000;
+    parameter jump = 4'b1001;
+    parameter sb = 4'b1010;
+    parameter sra = 4'b1011;
+    parameter sll = 4'b1100;
+    parameter jal = 4'b1101;
+    parameter bitNAND = 4'b1110;
+    parameter blt = 4'b1111;
 
     always @(*) begin
         case (Fetch[7:4])

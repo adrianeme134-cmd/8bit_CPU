@@ -1,20 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 09/14/2025 10:22:16 PM
-// Design Name: 8-bit ALU
-// Module Name: ALU
-// Project Name: CPU Design
-// Target Devices: BASYS3
-// Tool Versions: Vivado
-// Description: 8-bit Arithmetic Logic Unit supporting arithmetic, logic,
-//              shift, and comparison operations.
-//
-// Dependencies: None
-//
-//////////////////////////////////////////////////////////////////////////////////
 
 module ALU(
     input  [7:0] A, B,        // ALU 8-bit inputs
