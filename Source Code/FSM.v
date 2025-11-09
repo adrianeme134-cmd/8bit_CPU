@@ -14,19 +14,24 @@ module FSM(
     );
     
     
-  // Define instruction opcodes
-    parameter NOP = 4'b0000;
-    parameter ADD = 4'b0001;
-    parameter SUB = 4'b0010;
-    parameter ORR = 4'b0011;
-    parameter XORR = 4'b0100;
-    parameter LD  = 4'b0101;
-    parameter ST  = 4'b0110;
-    parameter JMP = 4'b0111;
-    parameter BEQ = 4'b1000;
-    parameter LDI = 4'b1001;
-    parameter NOTI= 4'b1010;
-    parameter HLT = 4'b1011;
+    // Define instruction opcodes
+    parameter addi = 4'b0000;
+    parameter add = 4'b0001;
+    parameter lw = 4'b0010;
+    parameter subi = 4'b0011;
+    parameter sub = 4'b0100;
+    parameter beq  = 4'b0101;
+    parameter bne  = 4'b0110;
+    parameter slt = 4'b0111;
+    parameter slti = 4'b1000;
+    parameter jump = 4'b1001;
+    parameter sw = 4'b1010;
+    parameter sra = 4'b1011;
+    parameter sll = 4'b1100;
+    parameter HLT = 4'b1101;
+    parameter bitNAND = 4'b1110;
+    parameter blt = 4'b1111;
+    
     
     
     parameter FETCH = 4'b0001;
@@ -38,6 +43,7 @@ module FSM(
 // This block will fetch the next state when posedge comes and update it
 reg [3:0] state, next_state;
 
+    // TODO: Fix FSM logic and map to each instruction
     always @(posedge clk) begin
         state <= next_state;
     end

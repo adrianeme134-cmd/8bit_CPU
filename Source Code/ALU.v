@@ -1,5 +1,7 @@
 `timescale 1ns / 1ps
 
+// TODO: Implement Carrys select Adder and shift-add multiplier in the future
+// For testing purposes +*/<< operators work for now
 module ALU(
     input  [7:0] A, B,        // ALU 8-bit inputs
     input  [3:0] ALU_Sel,     // ALU operation select

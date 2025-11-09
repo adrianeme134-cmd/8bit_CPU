@@ -32,15 +32,24 @@ The goal of this project is not yet to achieve full functionality, but rather to
 
 ## Instruction Format
 
-Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive bytes:
+Each instruction is **16 bits (2 bytes)** wide and stored in ROM as two consecutive bytes:
 
-| 15–12 | 11–9 | 8–6 | 5–3 | 2–0 |
-|--------|-------|------|------|------|
-| Opcode | Dest | Reg1 | Reg2 | Flags/unused |
+| Format | 4 bits | 3 bits | 3 bits | 3 bits | 3 bits |
+|---------|--------|--------|--------|--------|--------|
+| **R-Type** | op | rd | rs | rt | unused |
+| **I-Type** | op | rd | rs | Immediate/address | |
+| **J-Type** | op | Target address | | | |
 
-- **Opcode (4 bits):** Operation type (ADD, SUB, LD, ST, etc.)  
-- **Destination / Source Registers (3 bits each):** Identify which registers participate in the instruction  
-- **Flags (3 bits):** Reserved for future condition codes  
+| Bit Indices | 15–12 | 11–9 | 8–6 | 5–3 | 2–0 |
+|--------------|--------|-------|------|------|------|
+
+**Field Descriptions:**
+- **op:** Operation of instruction  
+- **rd:** Destination operand register  
+- **rs:** First source operand register  
+- **rt:** Second source operand register  
+- **immediate:** Constant for immediate instructions  
+- **address:** Offset for load/store instructions  
 
 ---
 
@@ -63,8 +72,8 @@ Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive 
 | **Branch / Control** | `beq` | `beq R1,R2,label` | if (R1 == R2) PC = label | Branch if equal | Immediate | I-Type |
 |  | `bne` | `bne R1,R2,label` | if (R1 != R2) PC = label | Branch if not equal | Immediate | I-Type |
 |  | `blt` | `blt R1,R2,label` | if (R1 < R2) PC = label | Branch if less than | Immediate | I-Type |
-| **Jump / Link** | `jump` | `jump label` | PC = label | Unconditional jump | Jump Type | J-Type |
-|  | `jal` | `jal label` | R7 = PC + 2; PC = label | Jump and link (function call) | Jump Type | J-Type |
+| **Jump** | `jump` | `jump label` | PC = label | Unconditional jump | Jump Type | J-Type |
+|  | `HLT` | `HLT` | HLT | Terminates program | N/A | — |
 
 ---
 
@@ -86,15 +95,13 @@ Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive 
 ---
 
 ## Tools Used
-
-- **Vivado 2017.4** – Synthesis, simulation, and testbench verification   
+- **Vivado 2017.4** – Synthesis, simulation, and testbench verification  
 - **Git / GitHub** – Version control and project documentation  
-- **BASYS3 FPGA** - FPGA used for testing and design verification  
+- **BASYS3 FPGA** – FPGA used for testing and design verification  
 
 ---
 
 ## Learning Objectives
-
 - Understand how CPUs execute instructions at the hardware level  
 - Learn how to design and connect datapath components (PC, ALU, registers, RAM)  
 - Implement control flow through a finite-state machine  
@@ -103,8 +110,9 @@ Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive 
 ---
 
 ## Future Work
-
-- Create top-level CPU integration connecting all modules  
-- Implement branching and jump logic  
-- Add immediate value and I/O instructions  
-- Extend instruction set  
+- Create top-level CPU datapath connecting all modules  
+- Create custom ALU module without the use of built-in `+` and shift operators  
+- Finish Finite State Machine logic  
+- Testbench all modules  
+- Make sure integers are signed (2s compliment)
+- Possible Floating point unit in the far future after all other modules work
