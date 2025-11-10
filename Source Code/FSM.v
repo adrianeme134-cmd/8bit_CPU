@@ -5,11 +5,11 @@ module FSM(
     input wire clk,
     input wire [3:0] Opcode, //Input from decoder
     output reg  [3:0] ALUOp,  // Operation code to output to ALU
-    output reg  MemWrite,
-    output reg  RegWrite,
-    output reg  MemRead,
-    output reg  PCWrite,
-    output reg  IRWrite
+    output reg  MemWrite, // Control signal to write to RAM
+    output reg  RegWrite, // Control signal to write to Register_file (no control signal for Reg_read because it is combinational read)
+    output reg  MemRead, // Control signal to read from RAM
+    output reg  PCWrite, // Control signal to write to PC
+    output reg  IRWrite // Control signal to write to Instruction Register
 
     );
     
@@ -32,35 +32,35 @@ module FSM(
     parameter bitNAND = 4'b1110;
     parameter blt = 4'b1111;
     
-    
-    
-    parameter FETCH = 4'b0001;
-    parameter EXECUTE = 4'b0010;
-    parameter WRITEBACK = 4'b0011;
-    parameter STOREMEMORY = 4'b0100;
-    parameter HALT = 4'b0101;
+  
+    parameter FETCH = 5'b10001;
+    parameter EXECUTE = 5'b10010;
+    parameter WRITEBACK = 5'b10011;
+    parameter STORE_MEMORY = 5'b10100;
+    parameter HALT = 5'b10101;
 
-// This block will fetch the next state when posedge comes and update it
+
+// This is a Sequential & Combinational block FSM that will allow states to change only at clk edge
+// and allow signals to change immediately
 reg [3:0] state, next_state;
 
-    // TODO: Fix FSM logic and map to each instruction
     always @(posedge clk) begin
         state <= next_state;
     end
     
     
-always @(*) begin //combinational case statement that will update when posedge comes
-        // default outputs
+always @(*) begin 
+
+        // Default states that will be reinitialize when the state everytime (and overriden in the case block) if an input change is detected
         ALUOp = 4'b0000;
         RegWrite = 0;
         MemRead = 0;
         MemWrite = 0;
         PCWrite = 0;
         IRWrite = 0;
-        next_state = FETCH;  //next_state will always equal fetch
+        next_state = FETCH;  //Default state will always equal fetch, will be overriden by case state assignment below
         
         
-        // Implement later if case statements to make certain instructions skip states like  if (Opcode != ST && Opcode != BEQ)
         case (state)
             FETCH: begin
                 MemRead = 1;
@@ -70,19 +70,101 @@ always @(*) begin //combinational case statement that will update when posedge c
             
             EXECUTE: begin
                 case (Opcode)
-                    ADD:  ALUOp = 4'b0001;
-                    SUB:  ALUOp = 4'b0010;
-                    LD:   MemRead = 1;
-                    ST:   MemWrite = 1;
+                
+                    addi: begin  
+                    ALUOp = 4'b0000;                   
+                    next_state = WRITEBACK;                  
+                    end
+                    
+                    add:  begin 
+                    ALUOp = 4'b0000;
+                    next_state = WRITEBACK; 
+                    end
+                    
+                    lw:  begin 
+                    ALUOp = 4'b0000; 
+                    MemRead = 1;   
+                    next_state = WRITEBACK;                                   
+                    end
+                    
+                    subi: begin  
+                    ALUOp = 4'b0001; 
+                    next_state = WRITEBACK;                     
+                    end
+                    
+                    sub: begin  
+                    ALUOp = 4'b0001; 
+                    next_state = WRITEBACK; 
+                    end
+                    
+                    beq:  begin
+                    ALUOp = 4'b1111;// A == B Equivalence checker
+                    next_state = FETCH;
+                    end
+                    
+                    bne: begin
+                    ALUOp = 4'b1111;// A == B Equivalence checker
+                    next_state = FETCH;
+                    end
+                    
+                    slt: begin
+                    ALUOp = 4'b1110; // A > B set 1 else 0
+                    next_state = WRITEBACK;
+                    end
+                    
+                    slti: begin
+                    ALUOp = 4'b1110; // A > B set 1 else 0
+                    next_state = WRITEBACK;
+                    end
+                    
+                    jump: begin
+                    next_state = FETCH;
+                    end
+                    
+                    sw:  begin
+                    MemWrite = 1;
+                    next_state = STORE_MEMORY;
+                    end
+                    
+                    sra: begin  
+                    ALUOp = 4'b0101; //This is shift right logical, will disregard sign bit, 
+                    next_state = WRITEBACK;
+                    end
+                    
+                    sll: begin
+                    ALUOp = 4'b0100; // shift left logical
+                    next_state = WRITEBACK;
+                    end
+                    
+                    HLT: begin
+                    next_state = HLT;
+                    end
+                    
+                    bitNAND: begin
+                    ALUOp = 4'b1100;
+                    next_state = WRITEBACK;
+                    end
+                    
+                    blt: begin
+                    ALUOp = 4'b1110; // if A > B then don't branch
+                    next_state = FETCH;
+                    end
                 endcase
-                next_state = WRITEBACK;
+ 
             end
-    
             WRITEBACK: begin
                 RegWrite = 1;
                 PCWrite = 1;
                 next_state = FETCH;
             end
+            STORE_MEMORY: begin
+                 RegWrite = 1;
+                 PCWrite = 1;
+                 next_state = FETCH;
+             end
+             HALT: begin
+                  next_state = HALT;
+              end
         endcase
     end
 

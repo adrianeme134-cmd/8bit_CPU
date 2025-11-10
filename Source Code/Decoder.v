@@ -1,14 +1,14 @@
 `timescale 1ns / 1ps
 
 
-//Job of the Decoder module is to take the machine code from instruction register and break the instruction up to send to FSM, ALU, Register file
+
 module Decoder(
     input wire [15:0] Fetch,       // 16-bit instruction assembled from ROM
     output reg  [2:0] Register_Destination, //3 bit field where output bits will live, this goes to register file
     output reg   [2:0]Register_1_operand, //3 bit field where register 1 lives output goes to register file
     output reg   [2:0]Register_2_operand, //3 bit field where register 2 lives output goes to register file
     output reg [3:0] Opcode, //4 bit opcode that tells FSM/ALU what operation to perform
-    output reg ALUsrc // Will determine if datapath uses immediate or register 2 for operations
+    output reg ALUsrc // Will output 1 or 0 out to datapath to determine if we will use immediate or register.
 );
 
     // Define instruction opcodes

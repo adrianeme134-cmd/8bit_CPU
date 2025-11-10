@@ -1,5 +1,7 @@
 `timescale 1ns / 1ps
 
+
+// address line is 10 bits
 module Data_RAM (
     input clk,
     input write_enable, // write_enable signal comes from FSM
@@ -11,15 +13,15 @@ module Data_RAM (
 // 1KB of byte addressable memory
 reg [7:0]ram_block[0:1023];
 
-// Example of synchronous write behavior
+// Example of synchronous read and write behavior
 always @(posedge clk) begin
-        if(write_enable) // Will write to address when write_enable assrted by FSM is high, and posedge is high, 
+        if(write_enable) 
             ram_block[address] <= data_in;
         else
-            data_out <= ram_block[address]; // Will read out the data at addr when only when posedge clk and write_enable is low
+            data_out <= ram_block[address]; 
 end
 
 // This behavior prevents reading and writing at the same time, unstable behavior
-
+// RAM looks like the Register_file module but it does not have combinational read due to the design of the actual physical hardware
 
 endmodule
