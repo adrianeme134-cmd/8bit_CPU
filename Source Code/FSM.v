@@ -12,7 +12,8 @@ module FSM(
     output reg  IRWrite // Control signal to write to Instruction Register
 
     );
-    
+  
+     // we might need to output a jump en flag for jump instructions and datapath  
     
     // Define instruction opcodes
     parameter addi = 4'b0000;

@@ -14,7 +14,7 @@ module Register_file(
     reg [7:0]ram_block[0:7]; // 8 Registers R0-R7 8 bit wide each
     // 4 Registers to save  
     
-    // Synchronous write
+    // Synchronous write, 10ns write, 1 clock to write and read
     always @(posedge clk) begin
             if(reg_write) //Write to the destination register
                 ram_block[Register_Destination] <= data_in;

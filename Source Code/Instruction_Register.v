@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
-
-module Instruction_Register #(parameter ADDRESS_WIDTH = 3) (
+// This should just a module be where ROM lives since this was moved out of its own module
+module Unused #(parameter ADDRESS_WIDTH = 3) (
     input  wire [ADDRESS_WIDTH-1:0] addr, // Address that comes from Program Counter, will point to the address of the instruction we are currently on
     output wire  [15:0] Fetch // 16-bit Instruction to be sent to decoder
     );
@@ -13,7 +13,7 @@ module Instruction_Register #(parameter ADDRESS_WIDTH = 3) (
     reg [7:0] rom_data [0:7]; // 8 entries
 
     initial begin
-        // 8 Ram modules will store up to 4 instructions of byte addressed memory
+        // 8 ROM modules will store up to 4 instructions of byte addressed memory
         rom_data[0] = 8'b00010100; 
         rom_data[1] = 4'h5; 
         rom_data[2] = 4'hC; 

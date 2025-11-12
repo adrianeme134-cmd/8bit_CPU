@@ -2,7 +2,7 @@
 
 ## Overview
 This project is an **in-progress educational 8-bit CPU** built entirely in Verilog.  
-It is being developed as a learning exercise to understand how a processor executes instructions through the **fetch, decode, execute, and writeback** stages of a basic RISC-style architecture.  
+It is being developed as a learning exercise to understand how a processor executes instructions through the **fetch, decode, execute, and writeback** stages of a basic, non-pipelined, RISC-style architecture.  
 
 The design targets the **BASYS3 FPGA (Xilinx Artix-7)** and is tested through simulation in **Vivado** using testbenches and waveform analysis.
 
