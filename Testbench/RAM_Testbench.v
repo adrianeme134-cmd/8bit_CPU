@@ -4,7 +4,8 @@ module RAM_Testbench;
 
     reg clk;
     reg write_enable;
-    reg [9:0] address;
+    reg rst;
+    reg [15:0] address;
     reg [7:0] data_in;
     wire [7:0] data_out;
     
@@ -50,15 +51,15 @@ module RAM_Testbench;
         // Read back values
         address = 10'b000000000;
         @(posedge clk); // wait one clock for data to update
-        $display("Address 1 = %b", data_out);
+       
 
         address = 2;
         @(posedge clk);
-        $display("Address 2 = %b", data_out);
+        
 
         address = 3;
         @(posedge clk);
-        $display("Address 3 = %b", data_out);
+        
 
         $finish;
     end

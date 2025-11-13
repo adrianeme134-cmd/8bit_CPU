@@ -11,7 +11,7 @@ output reg [7:0] core_output
     parameter ADDRESS_WIDTH = 3; // 3 bits to address up to 8 bytes
     reg [15:0] Fetch; // Instruction Register 
     
-    // Eventually this needs to move out of the datapath, its ok for now for simulation and testing
+    // We need to integrate the RAM module here so the FSM can assert signals and write the instruction to IR
     initial begin
         // 8 ROM modules will store up to 4 instructions of byte addressed memory
         instruction_byte[0] = 8'b00010100; 
@@ -64,17 +64,18 @@ output reg [7:0] core_output
     );
    
    // Register file Interface
-    wire reg_write; // Flag to write to reg coming from FSM
+    wire RegWrite; // Flag to write to reg coming from FSM
     wire [7:0] data_out1; // Outputting Reg 1 data from Register file at all times (combinational read)
     wire [7:0] data_out2; // Outputting Reg 2 data from Register file at all times (combinational read)
     wire [7:0] data_in; // Wire from data driven by ALU
     
     Register_file Reg_module(
+    .rst(rst),
     .clk(clk),
     .Register_Destination(Register_Destination),
     .Register_1_operand(Register_1_operand),
     .Register_2_operand(Register_2_operand),
-    .reg_write(reg_write),
+    .RegWrite(RegWrite),
     .data_in(data_in),
     .data_out1(data_out1),
     .data_out2(data_out2)
@@ -89,14 +90,15 @@ output reg [7:0] core_output
     
     FSM Control_logic_module(
     .clk(clk),
+    .rst(rst),
     .Opcode(Opcode),
     .ALUOp(ALUOp),
     .MemWrite(MemWrite),
-    .RegWrite(reg_write),
+    .RegWrite(RegWrite),
     .MemRead(MemRead),
     .PCWrite(PC_en)
     ,.IRWrite(IRWrite)
     );
     
-    
+
 endmodule

@@ -3,6 +3,7 @@
 
 module FSM(
     input wire clk,
+    input wire rst,
     input wire [3:0] Opcode, //Input from decoder
     output reg  [3:0] ALUOp,  // Operation code to output to ALU
     output reg  MemWrite, // Control signal to write to RAM
@@ -43,9 +44,21 @@ module FSM(
 
 // This is a Sequential & Combinational block FSM that will allow states to change only at clk edge
 // and allow signals to change immediately
-reg [3:0] state, next_state;
+
+// *Another MISTAKE, This reg was declared as 4 bits, but I declared my state parameters above as 5 bits
+reg [5:0] state, next_state;
+
+// *MISTAKE* in this always case statement, I did not initiallize state to any value, therefore 
+// when I tested it in my testbench, everything would just stay at 0 because it was not going through
+// any states. This was the mistake:
+// always @(posedge clk) begin
+// state <= next_state;
+// end
 
     always @(posedge clk) begin
+    if(rst)
+        state <= FETCH;
+        else
         state <= next_state;
     end
     
@@ -64,7 +77,7 @@ always @(*) begin
         
         case (state)
             FETCH: begin
-                MemRead = 1;
+                MemRead = 1; // If our program was stored in RAM it would assert 1 to get the instruction
                 IRWrite = 1;
                 next_state = EXECUTE;
             end
@@ -138,7 +151,7 @@ always @(*) begin
                     end
                     
                     HLT: begin
-                    next_state = HLT;
+                    next_state = HALT;
                     end
                     
                     bitNAND: begin

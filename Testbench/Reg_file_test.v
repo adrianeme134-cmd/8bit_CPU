@@ -1,45 +1,61 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 11/02/2025 10:29:48 AM
-// Design Name: 
-// Module Name: Reg_file_test
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
+module Reg_file_test;
 
-module Reg_file_test();
+    reg clk;
+    reg rst;
+    reg [2:0] Register_Destination;
+    reg [2:0] Register_1_operand;
+    reg [2:0] Register_2_operand;
+    reg RegWrite;
+    reg [7:0] data_in;
+    wire [7:0] data_out1;
+    wire [7:0] data_out2;
 
-    
-     wire  [1:0] Register_Destination; //2 bit field where output bits will live, coming in from decoder
-     wire  Register_1_operand; //1 bit field where register 1 lives from decoder aka adress of field 1
-     wire  Register_2_operand; //1 bit field where register 2 lives from decoder aka address of field 2
-     wire write_enable; // Flag Coming in from FSM
-     wire [7:0]data_in; // data to write to a register coming from an ALU or some other place
-     reg [7:0]data_out1; // outputs data coming out
-     reg [7:0]data_out2;
-     reg clk;
-
-    Register_file uut(clk,Register_Destination,Register_1_operand,Register_2_operand,write_enable,data_in,data_out1,data_out2);
+    Register_file uut(
+    .clk(clk),
+    .rst(rst),
+    .Register_Destination(Register_Destination),
+    .Register_1_operand(Register_1_operand),
+    .Register_2_operand(Register_2_operand),
+    .RegWrite(RegWrite),
+    .data_in(data_in),
+    .data_out1(data_out1),
+    .data_out2(data_out2));
 
     always #5 clk = ~clk;
 
     initial begin
-    clk = 0;
-
     
+    clk = 0;
+    rst = 1; // Resets registers to known states 8'b0
+    
+    @(posedge clk);
+    rst = 0;
+    
+    @(posedge clk);  //Buffers between reset and regwrite
+    @(posedge clk);
+    
+    RegWrite = 1; // Write enable to register 0 and register 7
+    data_in = 8'b10101010;// Written to Reg 0
+    Register_Destination = 3'b000;
+    
+    @(posedge clk); // clk to refresh data_in 
+    
+    data_in = 8'b11110000;
+    Register_Destination = 3'b111;// Written to reg 7
+    
+    @(posedge clk);
+    
+    RegWrite = 0;
+    Register_1_operand = 3'b000; // Reading outputs from reg 0
+    Register_2_operand = 3'b111; // Reading outputs from reg 7
+    
+    @(posedge clk);
+    @(posedge clk);
+    
+    #100;
+    $stop;
     
     end
     
