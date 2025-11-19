@@ -29,8 +29,10 @@ module Decoder(
     parameter bitNAND = 4'b1110;
     parameter blt = 4'b1111;
 
+// IMMEDIATE INSTRUCTIONS NEED SIGN EXTENSIONS 
+
     always @(*) begin
-        // Initialization in between new instructions
+        // Defaults
         Opcode = 4'b0000;
         Register_Destination = 3'b000;
         Register_1_operand = 3'b000;

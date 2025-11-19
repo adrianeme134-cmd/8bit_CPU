@@ -7,22 +7,11 @@ input wire rst,
 output reg [7:0] core_output
     );
 
-    reg [7:0] instruction_byte [0:7]; // 8 entries of byte addressable memory
+    
     parameter ADDRESS_WIDTH = 3; // 3 bits to address up to 8 bytes
     reg [15:0] Fetch; // Instruction Register 
     
-    // We need to integrate the RAM module here so the FSM can assert signals and write the instruction to IR
-    initial begin
-        // 8 ROM modules will store up to 4 instructions of byte addressed memory
-        instruction_byte[0] = 8'b00010100; 
-        instruction_byte[1] = 8'b00010100; 
-        instruction_byte[2] = 8'b00010100; 
-        instruction_byte[3] = 8'b00010100; 
-        instruction_byte[4] = 8'b00010100;
-        instruction_byte[5] = 8'b00010100;
-        instruction_byte[6] = 8'b00010100; 
-        instruction_byte[7] = 8'b00010100; 
-    end
+    // Need to instantiate cache module here
 
     // Program counter interface
     wire PC_en; // Signal coming in from FSM to enable PC
@@ -44,7 +33,7 @@ output reg [7:0] core_output
     // assign Fetch = {instruction_byte[pc+1],instruction_byte[pc]}; this is a mistake and we cannot do this because program counter signals are not stable and will flick through states
     // Fetch must be a reg implying it must be clocked for signal stability
     always@(posedge clk) begin
-    Fetch <= {instruction_byte[pc+1],instruction_byte[pc]};
+   // Fetch <= {instruction_byte[pc+1],instruction_byte[pc]};
     end
     
     // Decoder Interface

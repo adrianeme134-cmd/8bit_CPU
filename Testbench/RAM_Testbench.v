@@ -1,16 +1,16 @@
 `timescale 1ns / 1ps
 
-module RAM_Testbench;
+module Cache_TB;
 
     reg clk;
     reg write_enable;
     reg rst;
-    reg [15:0] address;
+    reg [7:0] address;
     reg [7:0] data_in;
     wire [7:0] data_out;
     
     // Instantiate the RAM
-    Data_RAM uut (
+    Cache uut (
         .clk(clk),
         .write_enable(write_enable),
         .address(address),
@@ -31,7 +31,7 @@ module RAM_Testbench;
         @(posedge clk);
 
         // Write 0xFF to address 1
-        address = 10'b000000000; data_in = 8'hFF; write_enable = 1;
+        address = 8'b00000000; data_in = 8'hFF; write_enable = 1;
         @(posedge clk);
         write_enable = 0;
 
@@ -49,7 +49,7 @@ module RAM_Testbench;
         @(posedge clk);
 
         // Read back values
-        address = 10'b000000000;
+        address = 8'b00000000;
         @(posedge clk); // wait one clock for data to update
        
 
