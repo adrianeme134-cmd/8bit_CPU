@@ -63,16 +63,15 @@ reg [5:0] state, next_state;
     end
     
     
-always @(*) begin 
-
-        // Default states that will be reinitialize when the state everytime (and overriden in the case block) if an input change is detected
+    always @(*) begin 
+        // Default outputs to not accidentally infer  latches
         ALUOp = 4'b0000;
         RegWrite = 0;
         MemRead = 0;
         MemWrite = 0;
         PCWrite = 0;
         IRWrite = 0;
-        next_state = FETCH;  //Default state will always equal fetch, will be overriden by case state assignment below
+        next_state = FETCH;  
         
         
         case (state)

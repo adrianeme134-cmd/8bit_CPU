@@ -3,11 +3,11 @@
 // Split into blocks of 4, right now we have 2 blocks of 8 ripple carrys together
 
 module Carry_Select_Adder(
-    input [7:0] A,
-    input [7:0] B,
-    input Cin,
-    output [7:0]sum_out,
-    output Cout
+    input wire [7:0] A,
+    input wire [7:0] B,
+    input wire Cin,
+    output wire [7:0]sum_out,
+    output wire Cout
     );
   
     wire carryout [0:7];

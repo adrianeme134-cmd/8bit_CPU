@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Cache_TB;
+module RAM_TB;
 
     reg clk;
     reg write_enable;
@@ -10,7 +10,7 @@ module Cache_TB;
     wire [7:0] data_out;
     
     // Instantiate the RAM
-    Cache uut (
+    RAM uut (
         .clk(clk),
         .write_enable(write_enable),
         .address(address),

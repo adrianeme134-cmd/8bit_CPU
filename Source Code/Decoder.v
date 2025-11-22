@@ -8,7 +8,7 @@ module Decoder(
     output reg   [2:0]Register_1_operand, //3 bit field where register 1 lives output goes to register file
     output reg   [2:0]Register_2_operand, //3 bit field where register 2 lives output goes to register file
     output reg [3:0] Opcode, //4 bit opcode that tells FSM/ALU what operation to perform
-    output reg ALUsrc // Will output 1 or 0 out to datapath to determine if we will use immediate or register.
+    output reg Is_immediate// Will output 1 or 0 out to datapath to determine if we will use immediate or register.
 );
 
     // Define instruction opcodes
@@ -33,18 +33,18 @@ module Decoder(
 
     always @(*) begin
         // Defaults
-        Opcode = 4'b0000;
+        Opcode = 4'b1101;
         Register_Destination = 3'b000;
         Register_1_operand = 3'b000;
         Register_2_operand = 3'b000;
-        ALUsrc = 1'b0;
+        Is_immediate = 1'b0;
         
         case (Fetch[15:12])
             addi: begin 
             Opcode = addi;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1; // For rest of immediate bits, get them directly from instruction counter in datapath
+            Is_immediate = 1'b1; // For rest of immediate bits, get them directly from instruction counter in datapath
             end 
             
             add: begin 
@@ -58,14 +58,14 @@ module Decoder(
             Opcode = lw;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1;     
+            Is_immediate = 1'b1;     
             end
             
             subi: begin
             Opcode = subi;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1;     
+            Is_immediate = 1'b1;     
             end
             
             sub: begin Opcode = sub;
@@ -78,14 +78,14 @@ module Decoder(
             Opcode = beq;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1;   
+            Is_immediate = 1'b1;   
             end
             
             bne: begin 
             Opcode = bne;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1;    
+            Is_immediate = 1'b1;    
             end
             
             slt: begin    
@@ -99,7 +99,7 @@ module Decoder(
             Opcode = slti;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1;  
+            Is_immediate = 1'b1;  
             end
              
             jump: begin 
@@ -111,21 +111,21 @@ module Decoder(
             Opcode = sw;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1;  
+            Is_immediate = 1'b1;  
             end
             
             sra: begin
             Opcode = sra;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1;  
+            Is_immediate = 1'b1;  
             end
             
-            sll:begin 
+            sll: begin 
             Opcode = sll;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1;            
+            Is_immediate = 1'b1;            
             end
             
             HLT: begin 
@@ -136,17 +136,16 @@ module Decoder(
             Opcode = bitNAND;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1; 
+            Is_immediate = 1'b1; 
             end
             
             blt: begin
             Opcode = blt;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
-            ALUsrc = 1'b1; 
+            Is_immediate = 1'b1; 
             end
-            
-            default:Opcode = HLT;
+                       
         endcase
     end
 

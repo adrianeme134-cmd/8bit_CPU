@@ -11,7 +11,7 @@ output reg [7:0] core_output
     parameter ADDRESS_WIDTH = 3; // 3 bits to address up to 8 bytes
     reg [15:0] Fetch; // Instruction Register 
     
-    // Need to instantiate cache module here
+    // Need to instantiate instruction register
 
     // Program counter interface
     wire PC_en; // Signal coming in from FSM to enable PC
@@ -29,12 +29,10 @@ output reg [7:0] core_output
     .pc(pc)
     );
 
-    // PC wired to Instruction register here, (PC and Instruction Register wired successfully)
+
     // assign Fetch = {instruction_byte[pc+1],instruction_byte[pc]}; this is a mistake and we cannot do this because program counter signals are not stable and will flick through states
     // Fetch must be a reg implying it must be clocked for signal stability
-    always@(posedge clk) begin
-   // Fetch <= {instruction_byte[pc+1],instruction_byte[pc]};
-    end
+
     
     // Decoder Interface
     wire [2:0] Register_Destination;// wire that connects to Register file

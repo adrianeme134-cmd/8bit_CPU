@@ -50,7 +50,7 @@ The goal of this project is not yet to achieve full functionality, but rather to
 | FSM (FSM.v) | Controls CPU operation across Fetch → Execute → Writeback stages. Generates control signals like RegWrite, MemRead, MemWrite, PCWrite, and ALUOp. |
 | ALU (ALU.v) | Performs arithmetic and logic operations (ADD, SUB, AND, OR, XOR, XNOR, shifts, rotates, comparisons). |
 | Register File (Register_file.v) | Eight 8-bit general-purpose registers for operands and results. Supports synchronous writes and combinational reads. |
-| Data Memory (Data_RAM.v) | 1 KB of main memory (1024 × 8 bits). Used for load/store instructions. |
+| Data Memory (Data_RAM.v) | 256 Bytes of main memory (256 × 8 bits). Used for load/store instructions. |
 | Testbenches (RAM_TEST.v, etc.) | Verify module behavior and timing using simulated waveforms. |
 
 Note:  
