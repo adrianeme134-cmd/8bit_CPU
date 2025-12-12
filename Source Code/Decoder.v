@@ -3,12 +3,13 @@
 
 
 module Decoder(
-    input wire [15:0] Fetch,       // 16-bit instruction assembled from ROM
+    input wire [15:0] Fetch,       // 16-bit instruction assembled from ROM, comes from instruction reg
     output reg  [2:0] Register_Destination, //3 bit field where output bits will live, this goes to register file
     output reg   [2:0]Register_1_operand, //3 bit field where register 1 lives output goes to register file
     output reg   [2:0]Register_2_operand, //3 bit field where register 2 lives output goes to register file
     output reg [3:0] Opcode, //4 bit opcode that tells FSM/ALU what operation to perform
-    output reg Is_immediate// Will output 1 or 0 out to datapath to determine if we will use immediate or register.
+    output reg Is_immediate, // Will output 1 or 0 out to datapath to determine if we will use immediate or register.
+    output reg  [5:0] immediate // 6 bit immediate value, will need to be sign extended to 8 bits
 );
 
     // Define instruction opcodes
@@ -38,12 +39,14 @@ module Decoder(
         Register_1_operand = 3'b000;
         Register_2_operand = 3'b000;
         Is_immediate = 1'b0;
+        immediate = 6'b000000;
         
         case (Fetch[15:12])
             addi: begin 
             Opcode = addi;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
+            immediate = Fetch[5:0];
             Is_immediate = 1'b1; // For rest of immediate bits, get them directly from instruction counter in datapath
             end 
             
@@ -65,6 +68,7 @@ module Decoder(
             Opcode = subi;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
+            immediate = Fetch[5:0];
             Is_immediate = 1'b1;     
             end
             
@@ -99,6 +103,7 @@ module Decoder(
             Opcode = slti;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
+            immediate = Fetch[5:0];
             Is_immediate = 1'b1;  
             end
              
@@ -111,6 +116,7 @@ module Decoder(
             Opcode = sw;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
+            immediate = Fetch[5:0];
             Is_immediate = 1'b1;  
             end
             
@@ -118,6 +124,7 @@ module Decoder(
             Opcode = sra;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
+            immediate = Fetch[5:0];
             Is_immediate = 1'b1;  
             end
             
@@ -125,6 +132,7 @@ module Decoder(
             Opcode = sll;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
+            immediate = Fetch[5:0];
             Is_immediate = 1'b1;            
             end
             
@@ -136,6 +144,7 @@ module Decoder(
             Opcode = bitNAND;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
+            immediate = Fetch[5:0];
             Is_immediate = 1'b1; 
             end
             
@@ -143,6 +152,7 @@ module Decoder(
             Opcode = blt;
             Register_Destination = Fetch[11:9];
             Register_1_operand = Fetch[8:6];
+            immediate = Fetch[5:0];
             Is_immediate = 1'b1; 
             end
                        

@@ -1,13 +1,13 @@
 `timescale 1ns / 1ps
 
-module Ten_bit_Wallace_Tree_TB;
+module Wallace_Tree_TB;
 
 reg [7:0] A;
 reg [7:0] B;
-wire [9:0] sum;
+wire [15:0] sum;
 
 
-Ten_Bit_Wallace_Tree_Multiplier uut(.A(A),.B(B),.sum(sum));
+Wallace_Tree_Multiplier uut(.A(A),.B(B),.sum(sum));
 
 
 initial begin

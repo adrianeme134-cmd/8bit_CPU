@@ -10,8 +10,6 @@ module PC (
     output reg [2:0] pc
 );
 
-
-
     always @(posedge clk) begin
         if (rst) begin
             pc <= 2'b0; 

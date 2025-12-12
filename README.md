@@ -1,10 +1,10 @@
-## 8-Bit CPU Design (Verilog, BASYS3 FPGA)
+## 8-Bit CPU Design (Verilog, ZedBoard FPGA)
 
 ## Overview
 This project is an in-progress educational 8-bit CPU built entirely in Verilog.
 It is being developed as a learning exercise to understand how a processor executes instructions through the fetch, decode, execute, and writeback stages of a basic, non-pipelined, RISC-style architecture.
 
-The design targets the BASYS3 FPGA (Xilinx Artix-7) and is tested through simulation in Vivado using testbenches and waveform analysis.
+The design targets the ZedBoard FPGA (Zynq-7000 XC7Z020) and is tested through simulation in Vivado using testbenches and waveform analysis.
 
 The goal of this project is not yet to achieve full functionality, but rather to gain a hands-on understanding of digital logic design, datapath construction, and finite-state control.
 
@@ -48,7 +48,7 @@ The goal of this project is not yet to achieve full functionality, but rather to
 | Instruction Register (Instruction_Register.v) | Fetches and assembles 16-bit instructions from an 8-bit-wide ROM. |
 | Decoder (Decoder.v) | Splits the 16-bit instruction into opcode and register fields to route control signals to the FSM and datapath. |
 | FSM (FSM.v) | Controls CPU operation across Fetch → Execute → Writeback stages. Generates control signals like RegWrite, MemRead, MemWrite, PCWrite, and ALUOp. |
-| ALU (ALU.v) | Performs arithmetic and logic operations (ADD, SUB, AND, OR, XOR, XNOR, shifts, rotates, comparisons). |
+| ALU (ALU.v) | Performs arithmetic and logic operations (ADD, SUB, NAND, MUL, shifts, comparisons). |
 | Register File (Register_file.v) | Eight 8-bit general-purpose registers for operands and results. Supports synchronous writes and combinational reads. |
 | Data Memory (Data_RAM.v) | 256 Bytes of main memory (256 × 8 bits). Used for load/store instructions. |
 | Testbenches (RAM_TEST.v, etc.) | Verify module behavior and timing using simulated waveforms. |
@@ -62,18 +62,49 @@ Upcoming work includes full top-level integration, branching logic, and memory-m
 
 ## Instruction Format
 
-Each instruction is 16 bits (2 bytes) wide and stored in ROM as two consecutive bytes:
+All instructions follow this unified format:
 
-Format: | op (4b) | rd (3b) | rs (3b) | rt/immediate/address (6b)
+| op (4 bits) | rd (3 bits) | rs (3 bits) | rt / immediate / address (6 bits) |
 
-Bit indices: | 15–12 | 11–9 | 8–6 | 5–0 |
 
-Field Descriptions:
-- op: operation
-- rd: destination register
-- rs: source register
-- rt: second source register (R-type)
-- immediate/address: constant or memory offset
+R-Type Instructions (Register–Register)
+---------------------------------------
+Used for ALU operations (ADD, SUB, AND, OR, SLT, etc.).
+
+Format:
+| op[15:12] | rd[11:9] | rs[8:6] | rt[5:0] |
+
+Notes:
+- rt uses only the upper 3 bits (rt[5:3]).
+- Lower 3 bits (rt[2:0]) are unused padding.
+
+Fields:
+- op  = operation code
+- rd  = destination register
+- rs  = first source register
+- rt  = second source register (encoded in upper 3 bits)
+
+
+I-Type Instructions (Immediate, Load, Store, Branch)
+----------------------------------------------------
+Used for ADDI, SUBI, SLL, SRA, LW, SW, BEQ, etc.
+
+Format:
+| op[15:12] | rd[11:9] | rs[8:6] | immediate[5:0] |
+
+Fields:
+- op         = operation code
+- rd         = destination register
+- rs         = source register
+- immediate  = 6-bit signed or unsigned constant
+
+
+J-Type Instructions (Jump)
+--------------------------
+Used for jump instructions.
+
+Format:
+| op[15:12] | address[11:0] |
 
 ---
 
@@ -111,9 +142,9 @@ Field Descriptions:
 ---
 
 ## Tools Used
-- Vivado 2017.4 – Synthesis, simulation, and testbench verification
+- Vivado 2025.2 – Synthesis, simulation, and testbench verification
 - Git / GitHub – Version control and project documentation
-- BASYS3 FPGA – FPGA used for testing and design verification
+- ZedBoard FPGA – FPGA used for testing and design verification
 
 ---
 
@@ -127,9 +158,6 @@ Field Descriptions:
 
 ## Future Work
 - Create top-level CPU datapath connecting all modules
-- Create custom ALU module without the use of built-in `+` and shift operators
-- Finish Finite State Machine logic
-- Testbench all modules
-- Make sure integers are signed (2s complement)
+- Implement Booths Encoding into the Wallace Tree Multiplier
 - Possible floating point unit in the far future
 - Document full multicycle microarchitecture state diagram and CPI behavior

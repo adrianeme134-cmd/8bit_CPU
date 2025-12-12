@@ -42,7 +42,7 @@ module FSM(
     parameter HALT = 5'b10101;
 
 
-// This is a Sequential & Combinational block FSM that will allow states to change only at clk edge
+// This is a Sequential & Combinational block Moore FSM that will allow states to change only at clk edge
 // and allow signals to change immediately
 
 // *Another MISTAKE, This reg was declared as 4 bits, but I declared my state parameters above as 5 bits
@@ -121,12 +121,12 @@ reg [5:0] state, next_state;
                     end
                     
                     slt: begin
-                    ALUOp = 4'b1110; // A > B set 1 else 0
+                    ALUOp = 4'b1110; // A < B set 1 else 0
                     next_state = WRITEBACK;
                     end
                     
                     slti: begin
-                    ALUOp = 4'b1110; // A > B set 1 else 0
+                    ALUOp = 4'b1110; // A < B set 1 else 0
                     next_state = WRITEBACK;
                     end
                     
@@ -159,7 +159,7 @@ reg [5:0] state, next_state;
                     end
                     
                     blt: begin
-                    ALUOp = 4'b1110; // if A > B then don't branch
+                    ALUOp = 4'b1110; // if A < B then don't branch
                     next_state = FETCH;
                     end
                 endcase
