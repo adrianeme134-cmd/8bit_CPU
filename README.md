@@ -161,3 +161,4 @@ Format:
 - Implement Booths Encoding into the Wallace Tree Multiplier
 - Possible floating point unit in the far future
 - Document full multicycle microarchitecture state diagram and CPI behavior
+- Refactor ALU Module for cleaner readability
