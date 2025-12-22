@@ -9,8 +9,8 @@ module Reg_file_test;
     reg [2:0] Register_2_operand;
     reg RegWrite;
     reg [7:0] data_in;
-    wire [7:0] data_out1;
-    wire [7:0] data_out2;
+    wire [7:0] instr_data_out1;
+    wire [7:0] instr_data_out2;
 
     Register_file uut(
     .clk(clk),
@@ -20,8 +20,8 @@ module Reg_file_test;
     .Register_2_operand(Register_2_operand),
     .RegWrite(RegWrite),
     .data_in(data_in),
-    .data_out1(data_out1),
-    .data_out2(data_out2));
+    .instr_data_out1(data_out1),
+    .instr_data_out2(data_out2));
 
     always #5 clk = ~clk;
 

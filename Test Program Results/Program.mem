@@ -1,0 +1,15 @@
+00011111 ADDI  R0, R0, 31    R0 = 31
+00000000 
+00000000 ADDI  R0, R0, 0     R0 = 31
+00000000 
+00000000 ADD   R0, R0, R0    R0 = 62
+00010000
+00111111 SUBI  R0, R0, -1    R0 = 63
+00110000
+00111111 SLTI  R0, R0, -1    (63 < -1) FALSE R0 = 0
+10000000
+
+Value in R0 is 0 as expected
+
+
+// For this to run Delete all comments and leave only binary numbers

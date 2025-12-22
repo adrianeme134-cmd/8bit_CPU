@@ -1,0 +1,49 @@
+Time resolution is 1 ps
+Byte0 = 00011111 | Byte1 = 00000000
+T=5000 Register file STATE: R0=x R1=x R2=x R3=x R4=x R5=x R6=x R7=x
+T=5000 | PC=x | Fetch=xxxx | State=x | Instruction = | ALUsrcA = x | ALUsrcB = x |ALU_Out = x | IRwrite = x | Regwrite = x | Register Destination = x | Instruction Register 1 data = x | Instruction Register 2 data = x
+
+rst done
+
+T=15000 Register file STATE: R0=0 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=15000 | PC=0 | Fetch=xxxx | State=17 | Instruction = | ALUsrcA = x | ALUsrcB = x |ALU_Out = 0 | IRwrite = 1 | Regwrite = 0 | Register Destination = x | Instruction Register 1 data = x | Instruction Register 2 data = x
+T=25000 Register file STATE: R0=0 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=25000 | PC=0 | Fetch=001f | State=18 | Instruction =ADDI | ALUsrcA = 0 | ALUsrcB = 31 |ALU_Out = 0 | IRwrite = 0 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 0 | Instruction Register 2 data = 0
+T=35000 Register file STATE: R0=0 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=35000 | PC=0 | Fetch=001f | State=19 | Instruction =ADDI | ALUsrcA = 0 | ALUsrcB = 31 |ALU_Out = 31 | IRwrite = 0 | Regwrite = 1 | Register Destination = 0 | Instruction Register 1 data = 0 | Instruction Register 2 data = 0
+ADDI Instruction
+
+T=45000 Register file STATE: R0=31 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=45000 | PC=2 | Fetch=001f | State=17 | Instruction =ADDI | ALUsrcA = 31 | ALUsrcB = 31 |ALU_Out = 31 | IRwrite = 1 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 31 | Instruction Register 2 data = 31
+T=55000 Register file STATE: R0=31 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=55000 | PC=2 | Fetch=0000 | State=18 | Instruction =ADDI | ALUsrcA = 31 | ALUsrcB = 0 |ALU_Out = 31 | IRwrite = 0 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 31 | Instruction Register 2 data = 31
+T=65000 Register file STATE: R0=31 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=65000 | PC=2 | Fetch=0000 | State=19 | Instruction =ADDI | ALUsrcA = 31 | ALUsrcB = 0 |ALU_Out = 31 | IRwrite = 0 | Regwrite = 1 | Register Destination = 0 | Instruction Register 1 data = 31 | Instruction Register 2 data = 31
+ADD Instruction
+
+T=75000 Register file STATE: R0=31 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=75000 | PC=4 | Fetch=0000 | State=17 | Instruction =ADDI | ALUsrcA = 31 | ALUsrcB = 0 |ALU_Out = 31 | IRwrite = 1 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 31 | Instruction Register 2 data = 31
+T=85000 Register file STATE: R0=31 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=85000 | PC=4 | Fetch=1000 | State=18 | Instruction =ADD | ALUsrcA = 31 | ALUsrcB = 31 |ALU_Out = 31 | IRwrite = 0 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 31 | Instruction Register 2 data = 31
+T=95000 Register file STATE: R0=31 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=95000 | PC=4 | Fetch=1000 | State=19 | Instruction =ADD | ALUsrcA = 31 | ALUsrcB = 31 |ALU_Out = 62 | IRwrite = 0 | Regwrite = 1 | Register Destination = 0 | Instruction Register 1 data = 31 | Instruction Register 2 data = 31
+SUBI Instruction
+
+T=105000 Register file STATE: R0=62 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=105000 | PC=6 | Fetch=1000 | State=17 | Instruction =ADD | ALUsrcA = 62 | ALUsrcB = 62 |ALU_Out = 62 | IRwrite = 1 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 62 | Instruction Register 2 data = 62
+T=115000 Register file STATE: R0=62 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=115000 | PC=6 | Fetch=303f | State=18 | Instruction =SUBI | ALUsrcA = 62 | ALUsrcB = 255 |ALU_Out = 62 | IRwrite = 0 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 62 | Instruction Register 2 data = 62
+T=125000 Register file STATE: R0=62 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=125000 | PC=6 | Fetch=303f | State=19 | Instruction =SUBI | ALUsrcA = 62 | ALUsrcB = 255 |ALU_Out = 63 | IRwrite = 0 | Regwrite = 1 | Register Destination = 0 | Instruction Register 1 data = 62 | Instruction Register 2 data = 62
+SLTI Instruction
+
+T=135000 Register file STATE: R0=63 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=135000 | PC=8 | Fetch=303f | State=17 | Instruction =SUBI | ALUsrcA = 63 | ALUsrcB = 255 |ALU_Out = 63 | IRwrite = 1 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 63 | Instruction Register 2 data = 63
+T=145000 Register file STATE: R0=63 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=145000 | PC=8 | Fetch=803f | State=18 | Instruction =SLTI | ALUsrcA = 63 | ALUsrcB = 255 |ALU_Out = 63 | IRwrite = 0 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 63 | Instruction Register 2 data = 63
+T=155000 Register file STATE: R0=63 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=155000 | PC=8 | Fetch=803f | State=19 | Instruction =SLTI | ALUsrcA = 63 | ALUsrcB = 255 |ALU_Out = 0 | IRwrite = 0 | Regwrite = 1 | Register Destination = 0 | Instruction Register 1 data = 63 | Instruction Register 2 data = 63
+T=165000 Register file STATE: R0=0 R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+T=165000 | PC=10 | Fetch=803f | State=17 | Instruction =SLTI | ALUsrcA = 0 | ALUsrcB = 255 |ALU_Out = 0 | IRwrite = 1 | Regwrite = 0 | Register Destination = 0 | Instruction Register 1 data = 0 | Instruction Register 2 data = 0
+
+$stop called at time : 175 ns : File "C:/Users/Adria/Desktop/8_bit_CPU/8_bit_CPU.srcs/sim_1/new/CPU_Core_TB.v" Line 99
