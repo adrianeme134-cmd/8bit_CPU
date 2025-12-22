@@ -6,13 +6,13 @@ module PC (
     input wire rst,
     input wire PC_en,
     input wire jump_en,
-    input wire [2:0] next_pc_value, // For branching/jumping
-    output reg [2:0] pc
+    input wire [7:0] next_pc_value, // For branching/jumping
+    output reg [7:0] pc
 );
 
     always @(posedge clk) begin
         if (rst) begin
-            pc <= 2'b0; 
+            pc <= 8'b0; 
         end else if (PC_en) begin // Increase Program counter asserted by FSM
             if (jump_en) begin
                 pc <= next_pc_value; // Load new PC value (e.g., for branch/jump)

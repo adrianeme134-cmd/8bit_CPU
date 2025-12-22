@@ -4,17 +4,17 @@
 module FSM(
     input wire clk,
     input wire rst,
-    input wire [3:0] Opcode, //Input from decoder
-    output reg  [3:0] ALUOp,  // Operation code to output to ALU
+    input wire  [3:0] Opcode, //Input from decoder
     output reg  MemWrite, // Control signal to write to RAM
     output reg  RegWrite, // Control signal to write to Register_file (no control signal for Reg_read because it is combinational read)
     output reg  MemRead, // Control signal to read from RAM
     output reg  PCWrite, // Control signal to write to PC
-    output reg  IRWrite // Control signal to write to Instruction Register
-
+    output reg  IRWrite, // Control signal to write to Instruction Register
+    output reg  ALU_Enable,
+    output reg  [5:0] State
     );
   
-     // we might need to output a jump en flag for jump instructions and datapath  
+    // we might need to output a jump en flag for jump instructions and datapath  
     
     // Define instruction opcodes
     parameter addi = 4'b0000;
@@ -46,7 +46,7 @@ module FSM(
 // and allow signals to change immediately
 
 // *Another MISTAKE, This reg was declared as 4 bits, but I declared my state parameters above as 5 bits
-reg [5:0] state, next_state;
+reg [5:0] next_state;
 
 // *MISTAKE* in this always case statement, I did not initiallize state to any value, therefore 
 // when I tested it in my testbench, everything would just stay at 0 because it was not going through
@@ -57,24 +57,24 @@ reg [5:0] state, next_state;
 
     always @(posedge clk) begin
     if(rst)
-        state <= FETCH;
+        State <= FETCH;
         else
-        state <= next_state;
+        State <= next_state;
     end
     
     
     always @(*) begin 
         // Default outputs to not accidentally infer  latches
-        ALUOp = 4'b0000;
-        RegWrite = 0;
-        MemRead = 0;
-        MemWrite = 0;
-        PCWrite = 0;
-        IRWrite = 0;
-        next_state = FETCH;  
+        RegWrite = 1'b0;
+        MemRead = 1'b0;
+        MemWrite = 1'b0;
+        PCWrite = 1'b0;
+        IRWrite = 1'b0;
+        ALU_Enable = 1'b0;
+        next_state = FETCH;
         
         
-        case (state)
+        case (State)
             FETCH: begin
                 MemRead = 1; // If our program was stored in RAM it would assert 1 to get the instruction
                 IRWrite = 1;
@@ -84,82 +84,89 @@ reg [5:0] state, next_state;
             EXECUTE: begin
                 case (Opcode)
                 
-                    addi: begin  
-                    ALUOp = 4'b0000;                   
+                    addi: begin
+                    ALU_Enable = 1'b1;                                        
                     next_state = WRITEBACK;                  
                     end
                     
-                    add:  begin 
-                    ALUOp = 4'b0000;
+                    add:  begin
+                    ALU_Enable = 1'b1;        
                     next_state = WRITEBACK; 
                     end
                     
                     lw:  begin 
-                    ALUOp = 4'b0000; 
-                    MemRead = 1;   
+                    MemRead = 1;
+                    ALU_Enable = 1'b1;   
                     next_state = WRITEBACK;                                   
                     end
                     
-                    subi: begin  
-                    ALUOp = 4'b0001; 
+                    subi: begin
+                    ALU_Enable = 1'b1;  
                     next_state = WRITEBACK;                     
                     end
                     
-                    sub: begin  
-                    ALUOp = 4'b0001; 
+                    sub: begin
+                    ALU_Enable = 1'b1;  
                     next_state = WRITEBACK; 
                     end
                     
                     beq:  begin
-                    ALUOp = 4'b1111;// A == B Equivalence checker
+                    ALU_Enable = 1'b1;
+                    PCWrite = 1;
                     next_state = FETCH;
                     end
                     
                     bne: begin
-                    ALUOp = 4'b1111;// A == B Equivalence checker
+                    ALU_Enable = 1'b1;               
+                    PCWrite = 1;
                     next_state = FETCH;
                     end
                     
                     slt: begin
-                    ALUOp = 4'b1110; // A < B set 1 else 0
+                    ALU_Enable = 1'b1;                   
                     next_state = WRITEBACK;
                     end
                     
                     slti: begin
-                    ALUOp = 4'b1110; // A < B set 1 else 0
+                    ALU_Enable = 1'b1;
                     next_state = WRITEBACK;
                     end
                     
                     jump: begin
+                    ALU_Enable = 1'b1;
+                    PCWrite = 1;
                     next_state = FETCH;
                     end
                     
                     sw:  begin
+                    ALU_Enable = 1'b1;
                     MemWrite = 1;
                     next_state = STORE_MEMORY;
                     end
                     
-                    sra: begin  
-                    ALUOp = 4'b0101; //This is shift right logical, will disregard sign bit, 
+                    sra: begin
+                    ALU_Enable = 1'b1;  
                     next_state = WRITEBACK;
                     end
                     
                     sll: begin
-                    ALUOp = 4'b0100; // shift left logical
+                    ALU_Enable = 1'b1;
                     next_state = WRITEBACK;
                     end
                     
                     HLT: begin
+                    ALU_Enable = 1'b1;
                     next_state = HALT;
                     end
                     
                     bitNAND: begin
-                    ALUOp = 4'b1100;
+                    ALU_Enable = 1'b1;
                     next_state = WRITEBACK;
                     end
                     
                     blt: begin
-                    ALUOp = 4'b1110; // if A < B then don't branch
+                    ALU_Enable = 1'b1;
+                    PCWrite = 1;
                     next_state = FETCH;
                     end
                 endcase
@@ -171,7 +178,7 @@ reg [5:0] state, next_state;
                 next_state = FETCH;
             end
             STORE_MEMORY: begin
-                 RegWrite = 1;
+                 MemWrite = 1;
                  PCWrite = 1;
                  next_state = FETCH;
              end
